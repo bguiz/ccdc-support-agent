@@ -1,0 +1,10 @@
+[project]
+name = "ccdc-support-agent"
+version = "0.0.0"
+description = "CCDC support agent"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "anthropic>=0.101.0",
+    "python-dotenv>=1.2.1",
+]
