@@ -20,18 +20,46 @@ def get_customer(query: str) -> str:
             # Return the matched customer as a JSON string
             return json.dumps(customer)
 
+    if ((not query.startswith('CUST-')) and (query.find('@') == -1)):
+      return json.dumps({
+        "error": {
+          "type": "validation",
+          "retryable": False,
+          "message": (
+              f"Customer ID '{query}' is invalid."
+              "All customer IDs must start with 'CUST-'"
+          )
+        }
+      })
+
     # If no match is found, return a structured error response
     return json.dumps({
-        "error": "customer_not_found",
-        "message": f"No customer found matching '{query}'. "
-                   "Please check the name, email, or customer ID and try again."
+      "error": {
+        "type": "business",
+        "retryable": False,
+        "message": (
+            f"Customer ID '{query}' is was not found."
+            "Please check the name, email, or customer ID and try again."
+        )
+      }
     })
-
 
 # Fetch an order using its order ID
 def lookup_order(order_id: str) -> str:
     # Normalize input (strip spaces + standardize casing)
     order_id = order_id.strip().upper()
+
+    if (not order_id.startswith('ORD-')):
+      return json.dumps({
+        "error": {
+          "type": "validation",
+          "retryable": False,
+          "message": (
+              f"Order ID '{order_id}' is invalid."
+              "All order IDs must start with 'ORD-'"
+          )
+        }
+      })
 
     # Check if the order exists in the dataset
     if order_id in ORDERS:
@@ -40,15 +68,20 @@ def lookup_order(order_id: str) -> str:
 
     # Return a structured error if the order is not found
     return json.dumps({
-        "error": "order_not_found",
-        "message": f"No order found with ID '{order_id}'. "
-                   "Please check the order ID and try again."
+      "error": {
+        "type": "business",
+        "retryable": False,
+        "message": (
+            f"Order ID '{order_id}' not found."
+            "Ask the customer to specify a valid order ID."
+            "Double check their invoice."
+        )
+      }
     })
-
 
 # Central dispatcher that routes tool calls to the correct function
 def run_tool(tool_name: str, tool_input: dict) -> str:
-    print("run_tool ->", json.dumps({
+    print("[run_tool] ->", json.dumps({
       "tool_name": tool_name,
       "tool_input": tool_input,
     }), "...")
@@ -57,13 +90,13 @@ def run_tool(tool_name: str, tool_input: dict) -> str:
     if tool_name == "get_customer":
         # Expecting "query" in tool_input
         tool_result = get_customer(tool_input["query"])
-        print("run_tool <- ", json.dumps(tool_result))
+        print("[run_tool] <- ", json.dumps(tool_result))
         return tool_result
 
     elif tool_name == "lookup_order":
         # Expecting "order_id" in tool_input
         tool_result = lookup_order(tool_input["order_id"])
-        print("run_tool <- ", json.dumps(tool_result))
+        print("[run_tool] <- ", json.dumps(tool_result))
         return tool_result
 
     else:
