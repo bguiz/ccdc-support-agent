@@ -3,8 +3,9 @@ name = "ccdc-support-agent"
 version = "0.0.0"
 description = "CCDC support agent"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.13"
 dependencies = [
     "anthropic>=0.101.0",
+    "mcp[cli]>=1.27.1",
     "python-dotenv>=1.2.1",
 ]

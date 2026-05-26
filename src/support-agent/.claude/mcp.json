@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "support-agent-tools": {
+      "command": "uv",
+      "args": ["run", "python", "mcp_server.py"],
+      "cwd": "${workspaceFolder}/",
+      "env": {
+        "ANTHROPIC_API_KEY": "${env:ANTHROPIC_API_KEY}"
+      }
+    }
+  }
+}
