@@ -34,6 +34,20 @@ ORDERS = {
         "tracking_number": None,
         "notes": "Item held for warehouse inventory check. Expected to resolve within 24-48 hours."
     },
+    "ORD-8823": {
+        "order_id": "ORD-8821",
+        "customer_id": "CUST-2201",
+        "status": "processing",
+        "items": [
+            {"product": "Wireless Keyboard", "quantity": 1, "price": 79.99}
+        ],
+        "placed_at": "2024-01-08T14:23:00Z",
+        "estimated_ship_date": "2024-01-12T00:00:00Z",
+        "actual_ship_date": None,
+        "carrier": None,
+        "tracking_number": None,
+        "notes": "Item held for warehouse inventory check. Expected to resolve within 24-48 hours."
+    },
     "ORD-9999": {
         "order_id": "ORD-9999",
         "customer_id": "CUST-9999",

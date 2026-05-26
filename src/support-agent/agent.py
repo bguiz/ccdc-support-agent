@@ -39,6 +39,12 @@ def run_agent(user_message: str) -> str:
         {"role": "user", "content": user_message}
     ]
 
+    # track stats that needs to persist across multiple tool calls and user/model messages
+    session_state = {
+        "verified_customer_id": None,
+        "verified_customer_name": None,
+    }
+
     # Loop until Claude finishes the interaction
     while True:
         # Send current state (history + tools + system prompt) to Claude
@@ -74,7 +80,7 @@ def run_agent(user_message: str) -> str:
             for block in response.content:
                 if block.type == "tool_use":
                     # Execute the tool locally with provided inputs
-                    result = run_tool(block.name, block.input)
+                    result = run_tool(block.name, block.input, session_state)
 
                     # Collect tool results in the required format
                     tool_results.append({
